@@ -2,8 +2,8 @@
 
 (defn aggregate-id? [id] (string? id))
 
-(defn aggregate-root?
-  [ar]
+(defn aggregate-root? [ar]
+  (println "Aggregate: " ar)
   (and
     (aggregate-id? (:id ar))
     (string? (:type ar))
@@ -58,6 +58,7 @@
 (defmethod handle-event :default [state event] state)
 
 (defn event? [e]
+  (println "Event: " e)
   (and
     (string? (:event-id e))
     (pos? (:timestamp e))
