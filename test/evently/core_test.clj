@@ -4,7 +4,7 @@
 
 (deftest create-aggregate-test
   (let [aggregate-id "some-id"
-        ar (aggregate aggregate-id)]
+        ar (aggregate aggregate-id :some-thing)]
   (testing "Creating an aggregate yields 0 events"
     (is (empty? (events ar))))))
 
@@ -15,7 +15,7 @@
 (deftest apply-two-events-test
   (let [last-timestamp 10
         ar (-> "some-id"
-           (aggregate)
+           (aggregate :thing)
            (apply-change (event "event-1" 1 :thing-created {}))
            (apply-change (event "event-2" last-timestamp :something-happened-to-thing {:amount 20})))]
 

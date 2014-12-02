@@ -6,6 +6,7 @@
   [ar]
   (and
     (aggregate-id? (:id ar))
+    (string? (:type ar))
     (or
       (empty? (:uncommitted-events ar))
       (seq? (:uncommitted-events ar))))
@@ -14,10 +15,11 @@
 
 (defn aggregate
   "Creates an event-sourced aggregate root"
-  [aggregate-id]
+  [aggregate-id type]
   {:pre  [(string? aggregate-id)]
    :post  [(aggregate-root? %)]}
   {:id aggregate-id
+   :type type
    :uncommitted-events []
    :version 1
    :state {}})
@@ -45,7 +47,6 @@
   [aggregate-root]
   {:pre  [(aggregate-root? aggregate-root)]}
   (:state aggregate-root))
-
 
 (defn event-dispatcher [aggregate-root event]
   (:type event))
