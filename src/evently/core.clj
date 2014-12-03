@@ -1,8 +1,12 @@
 (ns evently.core)
 
-(defn aggregate-id? [id] (string? id))
+(defn aggregate-id? "Returns true if the id is a valid aggregate id"
+  [id]
+  (string? id))
 
-(defn aggregate-root? [ar]
+(defn aggregate-root?
+  "Returns true if the id is a valid aggregate root"
+  [ar]
   (and
     (aggregate-id? (:id ar))
     (string? (:type ar))
@@ -56,18 +60,25 @@
 
 (defmethod handle-event :default [state event] state)
 
-(defn event? [e]
+(defn event?
+  "Returns true if the id is a valid event"
+  [e]
   (and
     (string? (:event-id e))
     (pos? (:timestamp e))
     (keyword? (:type e))
     (associative? (:data e))))
 
-(defn next-version [aggregate-root]
+(defn next-version
   "Returns the next expected version of the given aggregate"
+  [aggregate-root]
   ((fnil inc 0) (:version aggregate-root)))
 
-(defn make-event [event-id timestamp type data]
+(defn make-event
+  "Generates an event from the given input. event-id should be a valid id,
+  timestamp is a long since epoch, type is a keyword and data is a map
+  containing event-specific serializable data."
+  [event-id timestamp type data]
   {:event-id event-id
    :timestamp timestamp
    :type type
