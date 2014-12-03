@@ -1,5 +1,6 @@
 (ns evently.order-test
   (:require [clojure.test :refer :all]
+    [evently.utils :refer :all]
     [evently.core :refer :all]))
 
 (defn order [id] (aggregate id :order))

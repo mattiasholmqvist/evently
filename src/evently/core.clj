@@ -1,5 +1,5 @@
 (ns evently.core
-  (:import [java.util UUID]))
+  (:require [evently.utils :refer :all]))
 
 (defn safe-inc [x]
   ((fnil inc 0) x))
@@ -121,9 +121,6 @@
   (let [aggregate-id (:aggregate-id (first events))
         root (aggregate aggregate-id type)]
     (reduce replay-event root events)))
-
-(defn random-id [] (.toString (UUID/randomUUID)))
-(defn now [] (System/currentTimeMillis))
 
 (defn emit-event
   ([aggregate event-type]
