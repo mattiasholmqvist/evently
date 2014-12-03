@@ -3,8 +3,8 @@
     [evently.core :refer :all]))
 
 (defn order [id] (aggregate id :order))
-
 (defn status [order] (:status (state order)))
+(defn status? [p order] (p order))
 (defn new? [order] (nil? (status order)))
 (defn placed? [order] (= :placed (status order)))
 (defn activated? [order] (= :activated (status order)))
@@ -15,15 +15,22 @@
 (defmethod handle-event :order-activated [state event]
   (assoc state :status :activated))
 
+(defn- cannot-place [order]
+  (IllegalArgumentException. (str "Can only activate placed orders. Order is " (status order))))
+
 (defn place [order]
-  (cond (new? order) (emit-event order :order-placed)
-    (placed? order) order
-    :else (throw (IllegalArgumentException.))))
+  (condp status? order
+    new? (emit-event order :order-placed)
+    placed? order
+    (throw (IllegalArgumentException.))))
 
 (defn activate [order]
-  (cond (placed? order) (emit-event order :order-activated)
-        (activated? order) order
-        :else (throw (IllegalArgumentException. (str "Can only activate placed orders. Order is " (status order))))))
+  (condp status? order
+    placed? (emit-event order :order-activated)
+    activated? order
+    (throw (cannot-place order))))
+
+;; TESTS
 
 (deftest place-and-activate-order-test
   (let [new-order (order (random-id))
