@@ -10,12 +10,6 @@
 (defn placed? [order] (= :placed (status order)))
 (defn activated? [order] (= :activated (status order)))
 
-(defmethod handle-event :order-placed [state event]
-  (assoc state :status :placed))
-
-(defmethod handle-event :order-activated [state event]
-  (assoc state :status :activated))
-
 (defn- cannot-place [order]
   (IllegalArgumentException. (str "Can only place new orders. Order is " (status order))))
 
@@ -35,6 +29,15 @@
     placed? (emit-event order :order-activated)
     activated? order
     (throw (cannot-activate order))))
+
+(defn- update-order-status [order-state status]
+  (assoc order-state :status status))
+
+(defmethod handle-event :order-placed [order-state order-placed-event]
+  (update-order-status order-state :placed))
+
+(defmethod handle-event :order-activated [order-state order-activated-event]
+  (update-order-status order-state :activated))
 
 ;; TESTS
 
