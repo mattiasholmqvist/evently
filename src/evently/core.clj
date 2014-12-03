@@ -1,4 +1,5 @@
-(ns evently.core)
+(ns evently.core
+  (:import [java.util UUID]))
 
 (defn safe-inc [x]
   ((fnil inc 0) x))
@@ -123,3 +124,6 @@
 
 (defn random-id [] (.toString (UUID/randomUUID)))
 (defn now [] (System/currentTimeMillis))
+
+(defn emit-event [aggregate event-type event-data]
+  (apply-change aggregate (make-event (random-id) (now) event-type event-data)))
