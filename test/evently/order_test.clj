@@ -22,10 +22,11 @@
 (defn- cannot-activate [order]
   (IllegalArgumentException. (str "Can only activate placed orders. Order is " (status order))))
 
-(defn place [order customer-information order-lines]
+(defn place [order customer-information order-lines total-price]
   (condp status? order
     new? (emit-event order :order-placed {:customer-info customer-information
-                                          :order-lines order-lines})
+                                          :order-lines order-lines
+                                          :total-price total-price})
     placed? order
     (throw (cannot-place order))))
 
@@ -45,17 +46,19 @@
                            :quantity 10
                            :unit-price 13.23}])
 
+(def example-total-price 132.30)
+
 (deftest place-and-activate-order-test
   (let [new-order (order (random-id))
         activated-order (-> new-order
-                            (place example-customer example-order-lines)
+                            (place example-customer example-order-lines example-total-price)
                             activate)]
     (testing "Activating an order"
       (is (= :activated (status activated-order))))))
 
 (deftest activate-order-twice-test
   (let [new-order (order (random-id))
-        placed-order (place new-order example-customer example-order-lines)
+        placed-order (place new-order example-customer example-order-lines example-total-price)
         double-activated-order (-> placed-order activate activate)]
   (testing "Activating an order twice does not generate another event"
     (is (= (+ 1 (count (events placed-order)))
