@@ -16,8 +16,8 @@
   (let [last-timestamp 10
         ar (-> "some-id"
            (aggregate :thing)
-           (apply-change (event "event-1" 1 :thing-created {}))
-           (apply-change (event "event-2" last-timestamp :something-happened-to-thing {:amount 20})))]
+           (apply-change (make-event "event-1" 1 :thing-created {}))
+           (apply-change (make-event "event-2" last-timestamp :something-happened-to-thing {:amount 20})))]
 
   (testing "Adding two events increments aggregate version with two"
     (is (= 3 (version ar))))

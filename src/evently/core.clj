@@ -3,7 +3,6 @@
 (defn aggregate-id? [id] (string? id))
 
 (defn aggregate-root? [ar]
-  (println "Aggregate: " ar)
   (and
     (aggregate-id? (:id ar))
     (string? (:type ar))
@@ -58,15 +57,17 @@
 (defmethod handle-event :default [state event] state)
 
 (defn event? [e]
-  (println "Event: " e)
   (and
     (string? (:event-id e))
     (pos? (:timestamp e))
     (keyword? (:type e))
     (associative? (:data e))))
 
-(defn event
-  [event-id timestamp type data]
+(defn next-version [aggregate-root]
+  "Returns the next expected version of the given aggregate"
+  ((fnil inc 0) (:version aggregate-root)))
+
+(defn make-event [event-id timestamp type data]
   {:event-id event-id
    :timestamp timestamp
    :type type
@@ -77,9 +78,10 @@
   [aggregate-root event]
   {:pre  [(aggregate-root? aggregate-root)
           (event? event)]}
-  (-> aggregate-root
-    (update-in [:version] inc)
-    (assoc-in  [:timestamp] (:timestamp event))
-    (update-in [:uncommitted-events] conj event)
-
-    (update-in [:state] handle-event event)))
+  (let [version (next-version aggregate-root)
+        versioned-event (assoc event :version version)]
+    (-> aggregate-root
+      (assoc-in [:version] (:version versioned-event))
+      (assoc-in  [:timestamp] (:timestamp versioned-event))
+      (update-in [:uncommitted-events] conj event)
+      (update-in [:state] handle-event versioned-event))))

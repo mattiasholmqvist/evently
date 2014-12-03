@@ -19,26 +19,25 @@
   (assoc state :status :activated))
 
 (defn place [order]
-  (cond (new? order) (apply-change order (event (random-id) (now) :order-placed {}))
+  (cond (new? order) (apply-change order (make-event (random-id) (now) :order-placed {}))
     (placed? order) order
     :else (throw (IllegalArgumentException.))))
 
 (defn activate [order]
-  (cond (placed? order) (apply-change order (event (random-id) (now) :order-activated {}))
+  (cond (placed? order) (apply-change order (make-event (random-id) (now) :order-activated {}))
         (activated? order) order
         :else (throw (IllegalArgumentException.))))
 
 (deftest place-and-activate-order-test
-  (let [o (-> (order "order-1")
-              place
-              activate)]
+  (let [new-order (order (random-id))
+        activated-order (-> new-order place activate)]
     (testing "Activating an order"
-      (is (= :activated (status o))))))
+      (is (= :activated (status activated-order))))))
 
 (deftest activate-order-twice-test
-  (let [o (-> (order "order-1")
-              place
-              activate)]
+  (let [new-order (order (random-id))
+        placed-order (place new-order)
+        double-activated-order (-> placed-order activate activate)]
   (testing "Activating an order twice does not generate another event"
-    (is (= (count (events o))
-           (count (events (activate o))))))))
+    (is (= (+ 1 (count (events placed-order)))
+           (count (events double-activated-order)))))))
