@@ -3,8 +3,6 @@
     [evently.core :refer :all])
   (:import [java.util UUID]))
 
-(defn random-id [] (.toString (UUID/randomUUID)))
-(defn now [] (System/currentTimeMillis))
 (defn order [id] (aggregate id :order))
 
 (defn status [order] (:status (state order)))

@@ -120,3 +120,6 @@
   (let [aggregate-id (:aggregate-id (first events))
         root (aggregate aggregate-id type)]
     (reduce replay-event root events)))
+
+(defn random-id [] (.toString (UUID/randomUUID)))
+(defn now [] (System/currentTimeMillis))
