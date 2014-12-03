@@ -66,7 +66,7 @@
 (defmethod handle-event :default [state event] state)
 
 (defn event?
-  "Returns true if the id is a valid event"
+  "Returns true if e is a valid event"
   [e]
   (and
     (string? (:event-id e))
