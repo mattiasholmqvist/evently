@@ -16,12 +16,12 @@
   (assoc state :status :activated))
 
 (defn place [order]
-  (cond (new? order) (emit-event order :order-placed {})
+  (cond (new? order) (emit-event order :order-placed)
     (placed? order) order
     :else (throw (IllegalArgumentException.))))
 
 (defn activate [order]
-  (cond (placed? order) (emit-event order :order-activated {})
+  (cond (placed? order) (emit-event order :order-activated)
         (activated? order) order
         :else (throw (IllegalArgumentException. (str "Can only activate placed orders. Order is " (status order))))))
 

@@ -37,13 +37,13 @@
   (let [aggregate-id "ar-1"
         uncommitted (->
                       (aggregate aggregate-id :thing)
-                      (apply-change (make-event "event-1" 1 :thing-created {}))
-                      (apply-change (make-event "event-2" 2 :something-happened-to-thing {:state-key :first-value}))
+                      (emit-event :thing-created)
+                      (emit-event :something-happened-to-thing {:state-key :first-value})
                       events)
         aggregate (materialize uncommitted :thing)
 
         overwritten-aggregate (-> aggregate
-                                  (apply-change (make-event "event-3" 2 :something-happened-to-thing {:state-key :overwritten-value}))
+                                  (emit-event :something-happened-to-thing {:state-key :overwritten-value})
                                   events
                                   (materialize :thing))]
   (testing "Materializing aggregate from events"

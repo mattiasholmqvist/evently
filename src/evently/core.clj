@@ -125,5 +125,8 @@
 (defn random-id [] (.toString (UUID/randomUUID)))
 (defn now [] (System/currentTimeMillis))
 
-(defn emit-event [aggregate event-type event-data]
-  (apply-change aggregate (make-event (random-id) (now) event-type event-data)))
+(defn emit-event
+  ([aggregate event-type]
+    (emit-event aggregate event-type {}))
+  ([aggregate event-type event-data]
+    (apply-change aggregate (make-event (random-id) (now) event-type event-data))))
