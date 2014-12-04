@@ -53,7 +53,7 @@ You may have noticed that the API supports chaining functions using the `->` ope
 
 As a principle, you should also try to make that the first argument of your functions since it would make chaining your functions with evently functions simple and nice. See the [test code](https://github.com/mattiasholmqvist/evently/blob/master/test/evently/order_test.clj) for examples of this!
 
-### I need more examples
+### More examples
 For a more extensive example see [order_test.clj](https://github.com/mattiasholmqvist/evently/blob/master/test/evently/order_test.clj) which implements an order aggregate root with some domain logic and validation code.
 
 ## License
