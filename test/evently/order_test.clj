@@ -16,11 +16,16 @@
 (defn- cannot-activate [order]
   (IllegalArgumentException. (str "Can only activate placed orders. Order is " (status order))))
 
+(defn- valid-order-placement-info [order-info]
+  order-info)
+
 (defn place [order customer-information order-lines total-price]
   (condp status? order
-    new? (emit-event order :order-placed {:customer-info customer-information
-                                          :order-lines order-lines
-                                          :total-price total-price})
+    new? (emit-event order :order-placed
+                           (valid-order-placement-info
+                            {:customer-info customer-information
+                             :order-lines order-lines
+                             :total-price total-price}))
     placed? order
     (throw (cannot-place order))))
 
