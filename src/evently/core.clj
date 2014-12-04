@@ -8,7 +8,7 @@
   [id]
   (string? id))
 
-(defn aggregate-root?
+(defn- aggregate-root?
   "Returns true if the id is a valid aggregate root"
   [ar]
   (and
@@ -20,6 +20,15 @@
     (or (nil? (:version ar))
         (pos? (:version ar)))
     (associative? (:state ar)))
+
+(defn- event?
+  "Returns true if e is a valid event"
+  [e]
+  (and
+    (string? (:event-id e))
+    (pos? (:timestamp e))
+    (keyword? (:type e))
+    (associative? (:data e))))
 
 (defn aggregate
   "Creates an event-sourced aggregate root"
@@ -64,15 +73,6 @@
   event-dispatcher)
 
 (defmethod handle-event :default [state event] state)
-
-(defn event?
-  "Returns true if e is a valid event"
-  [e]
-  (and
-    (string? (:event-id e))
-    (pos? (:timestamp e))
-    (keyword? (:type e))
-    (associative? (:data e))))
 
 (defn next-version
   "Returns the next expected version of the given aggregate. Returns 0 if the
