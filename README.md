@@ -44,8 +44,21 @@ When loading an event-sourced aggregate root we need to materialize it from all 
 
 As an example we can use a vector of two events to materialize an aggregate root of type `:order`:
 ```clojure
-(let [events [{:version 1, :aggregate-id "eb5b986d-c2d5-46cf-bfed-de80dd63e9e4", :event-id "f04bef23-54e0-448a-a846-f15caaedd2c0", :timestamp 1417695223489, :type :something, :data {}}
-{:version 2, :aggregate-id "eb5b986d-c2d5-46cf-bfed-de80dd63e9e4", :event-id "7893e677-837b-4908-b1c3-24f3415f1849", :timestamp 1417695223490, :type :something-else, :data {}}]]
+(let [events [
+  {:version 1,
+   :aggregate-id "eb5b986d-c2d5-46cf-bfed-de80dd63e9e4",
+   :event-id "f04bef23-54e0-448a-a846-f15caaedd2c0",
+   :timestamp 1417695223489,
+   :type :something,
+   :data {}
+  }
+  {:version 2,
+    :aggregate-id "eb5b986d-c2d5-46cf-bfed-de80dd63e9e4",
+    :event-id "7893e677-837b-4908-b1c3-24f3415f1849",
+    :timestamp 1417695223490,
+    :type
+    :something-else, :data {}
+  }]]
   (materialize events :order))
 ```
 If we now have extensions to the multimethod `handle-event`, these will be called in sequence when the events are processed. This will result in a materialized aggregate root with no uncommitted events.
