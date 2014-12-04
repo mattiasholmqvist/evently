@@ -2,7 +2,7 @@
 
 # evently
 
-Event sourcing example for Clojure.
+Event sourcing library for Clojure.
 
 *This project is under heavy development. Use at your own risk!*
 
