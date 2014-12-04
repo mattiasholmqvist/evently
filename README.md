@@ -20,9 +20,12 @@ evently uses Clojure data structures to represent aggregates and events. This ma
 (use 'evently.utils)
 
 (aggregate (random-id) :order)
+
+; Result
+{:id "0a47533e-5f0b-4a2f-8981-ae8273dbfdd6", :type :order, :uncommitted-events [], :version 0, :state {}}
 ```
 ### Emitting events
-To handle the event in the aggregate root and allow for update of the internal state, evently provides a multimethod `handle-event`which should be extended with the event type. The multimethod is invoked with an aggregate state map and the event map, which allows for modifying the aggregate root.
+To handle events in the aggregate root which allows for updating the internal state, evently provides a multimethod `handle-event` which is extended with the event type. The multimethod is invoked with an aggregate state map and the event map. This function should return the updated state of the aggregate.
 
 *Note: It is important to only update the state of the aggregate root and **not** implement domain logic in * `handle-event`. This will break the materialization of aggregate roots from previously stored events.
 
@@ -31,12 +34,30 @@ In the example below we update the order aggregate status to `:new-status`:
 (defmethod handle-event :something-happened [state event]
   (assoc state :status :new-status))
   ```
-The aggregate root can now emit an event (using `emit-event`) and evently will call the multimethod that matches the event type.
+The aggregate root can emit events (using `emit-event`) as a result from different business rules. evently will add the event to the list of uncommitted events inside the aggregate root and call the `handle-event` multimethod that matches the event type.
 
 ```clojure
 (let [order (aggregate (random-id) :order)]
   (-> order
       (emit-event :something-happened)))
+```
+
+### Storing events
+To get the list of uncommitted events from an aggregate root you can use the `events` function. This returns a pure Clojure vector of maps, which can be stored however you like:
+
+```clojure
+(let [order (aggregate (random-id) :order)]
+(-> order
+  (emit-event :something-happened)
+  events))
+
+; Result
+[{:version 1,
+  :aggregate-id "674d887d-4057-411f-ac5e-bb87ba746646",
+  :event-id "9282ae08-cf9e-45d3-9818-3136c3aff141",
+  :timestamp 1417703765661,
+  :type :something-happened,
+  :data {}}]
 ```
 
 ### Materializing aggregate roots
