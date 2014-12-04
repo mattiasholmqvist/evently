@@ -6,6 +6,8 @@ Event sourcing library for Clojure.
 
 *This project is under heavy development. Use at your own risk!*
 
+*Please give feedback and send pull requests!*
+
 ## Usage
 
 ### Rationale

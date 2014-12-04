@@ -123,7 +123,7 @@
     (reduce replay-event root events)))
 
 (defn emit-event
-  ([aggregate event-type]
-    (emit-event aggregate event-type {}))
-  ([aggregate event-type event-data]
-    (apply-change aggregate (make-event (random-id) (now) event-type event-data))))
+  ([aggregate-root event-type]
+    (emit-event aggregate-root event-type {}))
+  ([aggregate-root event-type event-data]
+    (apply-change aggregate-root (make-event (random-id) (now) event-type event-data))))
