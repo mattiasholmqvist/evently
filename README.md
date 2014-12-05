@@ -41,6 +41,12 @@ The aggregate root can emit events (using `emit-event`) as a result from differe
   (-> order
       (emit-event :something-happened)))
 ```
+If you want to attach data to the emitted event you can supply a data map as the last argument to `emit-event`:
+```clojure
+(let [order (aggregate (random-id) :order)]
+(-> order
+  (emit-event :something-happened {:important-event-data 123})))
+```
 
 ### Storing events
 To get the list of uncommitted events from an aggregate root you can use the `events` function. This returns a pure Clojure vector of maps, which can be stored however you like:
