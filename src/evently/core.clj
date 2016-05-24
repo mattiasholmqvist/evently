@@ -92,12 +92,12 @@
    :data data})
 
 (defn- apply-metadata-from [aggregate-root event]
-  (-> aggregate-root
-    (assoc-in [:version] (:version event))
-    (assoc-in [:timestamp] (:timestamp event))))
+  (assoc aggregate-root
+         :version (:version event)
+         :timestamp (:timestamp event)))
 
 (defn- apply-state-from [aggregate-root event]
-  (update-in aggregate-root [:state] handle-event event))
+  (update aggregate-root :state handle-event event))
 
 (defn apply-change
   "Generates a new version of the aggregate root with the event applied."
@@ -109,7 +109,7 @@
     (-> aggregate-root
       (apply-metadata-from versioned-event)
       (apply-state-from versioned-event)
-      (update-in [:uncommitted-events] conj versioned-event))))
+      (update :uncommitted-events conj versioned-event))))
 
 (defn replay-event
   [aggregate-root event]
