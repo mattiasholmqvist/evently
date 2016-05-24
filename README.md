@@ -100,7 +100,7 @@ For a more extensive example see [order_test.clj](https://github.com/mattiasholm
 
 ## License
 
-Copyright © 2014 Mattias Holmqvist
+Copyright © 2014-2016 Mattias Holmqvist
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
