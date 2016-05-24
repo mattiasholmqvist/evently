@@ -1,5 +1,5 @@
 (ns evently.core
-  (:require [evently.utils :refer :all]))
+  (:require [evently.utils :refer [random-id now]]))
 
 (defn safe-inc [x]
   ((fnil inc 0) x))
