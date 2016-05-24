@@ -4,7 +4,7 @@
 
 (deftest create-aggregate-test
   (let [aggregate-id "some-id"
-        ar (aggregate aggregate-id :some-thing)]
+        ar           (aggregate aggregate-id :some-thing)]
   (testing "Creating an aggregate yields 0 events"
     (is (empty? (events ar))))))
 
@@ -14,11 +14,11 @@
 
 (deftest apply-two-events-test
   (let [last-timestamp 10
-        aggregate-id "some-id"
-        ar (-> aggregate-id
-           (aggregate :thing)
-           (apply-change (make-event "event-1" 1 :thing-created {}))
-           (apply-change (make-event "event-2" last-timestamp :something-happened-to-thing {:amount 20})))]
+        aggregate-id   "some-id"
+        ar             (-> aggregate-id
+                         (aggregate :thing)
+                         (apply-change (make-event "event-1" 1 :thing-created {}))
+                         (apply-change (make-event "event-2" last-timestamp :something-happened-to-thing {:amount 20})))]
 
   (testing "Adding two events increments aggregate version with two"
     (is (= 2 (version ar))))
@@ -35,17 +35,17 @@
 
 (deftest materialize-test
   (let [aggregate-id "ar-1"
-        uncommitted (->
-                      (aggregate aggregate-id :thing)
-                      (emit-event :thing-created)
-                      (emit-event :something-happened-to-thing {:state-key :first-value})
-                      events)
-        aggregate (materialize uncommitted :thing)
+        uncommitted  (->
+                         (aggregate aggregate-id :thing)
+                       (emit-event :thing-created)
+                       (emit-event :something-happened-to-thing {:state-key :first-value})
+                       events)
+        aggregate    (materialize uncommitted :thing)
 
         overwritten-aggregate (-> aggregate
-                                  (emit-event :something-happened-to-thing {:state-key :overwritten-value})
-                                  events
-                                  (materialize :thing))]
+                                (emit-event :something-happened-to-thing {:state-key :overwritten-value})
+                                events
+                                (materialize :thing))]
   (testing "Materializing aggregate from events"
     (is (= 0 (count (events aggregate))))
     (is (= 2 (version aggregate)))
