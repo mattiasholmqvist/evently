@@ -1,4 +1,4 @@
-(defproject evently "0.1.2"
+(defproject evently "0.1.3-SNAPSHOT"
   :description "Small event sourcing library for Clojure"
   :url "http://github.com/mattiasholmqvist/evently"
   :license {:name "Eclipse Public License"
