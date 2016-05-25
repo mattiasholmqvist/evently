@@ -4,5 +4,4 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :repositories [["releases" {:url "http://clojars.org/evently"
-                            :creds :gpg}]])
+  :deploy-repositories [["clojars" {:url "https://clojars.org/evently" :creds :gpg}]])
