@@ -1,7 +1,10 @@
 (ns evently.order-test
   (:require [clojure.test :refer :all]
+            [clojure.spec :as spec]
             [evently.utils :refer :all]
             [evently.core :refer :all]))
+
+(spec/instrument-all)
 
 (defn order      [id]      (aggregate id :order))
 (defn status     [order]   (:status (state order)))
