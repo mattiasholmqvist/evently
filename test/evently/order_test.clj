@@ -41,13 +41,15 @@
 
 ;; TESTS
 
-(def example-customer {:name  "John Doe"
-                       :email "john.doe@example.com"})
+(def example-customer
+  {:name  "John Doe"
+   :email "john.doe@example.com"})
 
-(def example-order-lines [{:product-id (random-id)
-                           :title      "Some book"
-                           :quantity   10
-                           :unit-price 13.23}])
+(def example-order-lines
+  [{:product-id (random-id)
+    :title      "Some book"
+    :quantity   10
+    :unit-price 13.23}])
 
 (def example-total-price 132.30)
 
