@@ -8,9 +8,6 @@
 (defn safe-inc [x]
   ((fnil inc 0) x))
 
-(defn zero-or-pos? [x]
-  (or (pos? x) (zero? x)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; General-purpose Specs
@@ -31,7 +28,7 @@
 (spec/def ::id (spec/or :uuid uuid? :string string?))
 (spec/def ::type keyword?)
 (spec/def ::uncommitted-events (spec/* ::event))
-(spec/def ::version zero-or-pos?)
+(spec/def ::version integer?)
 (spec/def ::state associative?)
 
 (spec/def ::aggregate-root
