@@ -5,6 +5,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Helper functions
 
+(spec/fdef safe-inc
+  :args
+  (spec/cat :x number?)
+  :ret
+  number?)
+
 (defn safe-inc [x]
   ((fnil inc 0) x))
 
