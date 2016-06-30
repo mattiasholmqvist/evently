@@ -94,7 +94,7 @@
   :args
   (spec/cat :aggregate-root ::aggregate-root)
   :ret
-  ::timestamp)
+  (spec/nilable ::timestamp))
 
 (defn timestamp
   "Returns the last-updated timestamp for the aggregate root"
