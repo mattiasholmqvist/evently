@@ -140,12 +140,16 @@
 (defmethod handle-event :default [state event] state)
 
 
+(spec/def ::aggregate-id ::id)
+
 (spec/fdef next-version
   :args
   (spec/cat :aggregate-root ::aggregate-root)
   :ret
-  (spec/cat :aggregate-id ::id
-            :version ::version))
+  (spec/keys
+   :req-un
+   [::aggregate-id
+    ::version]))
 
 (defn next-version
   "Returns the next expected version of the given aggregate. Returns 0 if the
