@@ -119,7 +119,7 @@
   (spec/cat :aggregate-root ::aggregate-root
             :event keyword?)
   :ret
-  ::type)
+  (spec/nilable ::type))
 
 (defn event-dispatcher [aggregate-root event]
   (:type event))
