@@ -184,7 +184,12 @@
   (spec/cat :aggregate-root ::aggregate-root
             :event ::event)
   :ret
-  ::aggregate-root)
+  (spec/and
+   ::aggregate-root
+   (spec/keys
+    :req-un
+    [::version
+     ::timestamp])))
 
 (defn- apply-metadata-from [aggregate-root event]
   (assoc aggregate-root
@@ -237,7 +242,7 @@
 
 (spec/fdef materialize
   :args
-  (spec/cat :events (spec/coll-of ::event [])
+  (spec/cat :events (spec/coll-of ::event)
             :type ::type)
   :ret
   ::spec/any)
