@@ -34,7 +34,7 @@
 (spec/def ::id (spec/or :uuid uuid? :string string?))
 (spec/def ::type keyword?)
 (spec/def ::uncommitted-events (spec/* ::event))
-(spec/def ::version integer?)
+(spec/def ::version (spec/nilable integer?))
 (spec/def ::state associative?)
 
 (spec/def ::aggregate-root
