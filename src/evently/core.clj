@@ -245,7 +245,7 @@
   (spec/cat :events (spec/coll-of ::event)
             :type ::type)
   :ret
-  ::spec/any)
+  any?)
 
 (defn materialize [events type]
   (let [aggregate-id (:aggregate-id (first events))
@@ -257,7 +257,7 @@
   :args
   (spec/cat :aggregate-root ::aggregate-root
             :event-type ::type
-            :event-data (spec/? ::spec/any))
+            :event-data (spec/? any?))
   :ret
   ::event)
 
