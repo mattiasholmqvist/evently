@@ -1,6 +1,9 @@
 (ns evently.core-test
   (:require [clojure.test :refer :all]
+            [clojure.spec.test :as spec]
             [evently.core :refer :all]))
+
+(spec/instrument)
 
 (deftest create-aggregate-test
   (let [aggregate-id "some-id"

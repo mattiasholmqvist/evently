@@ -1,7 +1,10 @@
 (ns evently.order-test
   (:require [clojure.test :refer :all]
+            [clojure.spec.test :as spec]
             [evently.utils :refer :all]
             [evently.core :refer :all]))
+
+(spec/instrument)
 
 (defn order      [id]      (aggregate id :order))
 (defn status     [order]   (:status (state order)))
@@ -16,16 +19,14 @@
 (defn- cannot-activate [order]
   (IllegalArgumentException. (str "Can only activate placed orders. Order is " (status order))))
 
-(defn- valid-order-placement-info [order-info]
-  order-info)
-
 (defn place [order customer-information order-lines total-price]
   (condp status? order
-    new?    (emit-event order :order-placed
-                        (valid-order-placement-info
-                         {:customer-info customer-information
-                          :order-lines   order-lines
-                          :total-price   total-price}))
+    new?    (emit-event
+             order
+             :order-placed
+             {:customer-info customer-information
+              :order-lines   order-lines
+              :total-price   total-price})
     placed? order
     (throw (cannot-place order))))
 
@@ -35,24 +36,23 @@
     activated? order
     (throw (cannot-activate order))))
 
-(defn- update-order-status [order-state status]
-  (assoc order-state :status status))
-
 (defmethod handle-event :order-placed [order-state order-placed-event]
-  (update-order-status order-state :placed))
+  (assoc order-state :status :placed))
 
 (defmethod handle-event :order-activated [order-state order-activated-event]
-  (update-order-status order-state :activated))
+  (assoc order-state :status :activated))
 
 ;; TESTS
 
-(def example-customer {:name  "John Doe"
-                       :email "john.doe@example.com"})
+(def example-customer
+  {:name  "John Doe"
+   :email "john.doe@example.com"})
 
-(def example-order-lines [{:product-id (random-id)
-                           :title      "Some book"
-                           :quantity   10
-                           :unit-price 13.23}])
+(def example-order-lines
+  [{:product-id (random-id)
+    :title      "Some book"
+    :quantity   10
+    :unit-price 13.23}])
 
 (def example-total-price 132.30)
 
